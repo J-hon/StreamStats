@@ -14,7 +14,7 @@ class LoginController extends BaseController
 
     public function redirectToProvider(string $provider): JsonResponse
     {
-        $redirectUrl = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        $redirectUrl = Socialite::driver($provider)->scopes(['user:read:follows'])->stateless()->redirect()->getTargetUrl();
         return $this->responseJson(true, 200, 'Redirect URL retrieved!', ['redirect_url' => $redirectUrl]);
     }
 
