@@ -27,6 +27,7 @@ class StreamSeeder extends Seeder
 
             foreach($streams['data'] as $stream) {
                 $topLiveStreams[] = [
+                    'id'           => $stream['id'],
                     'title'        => $stream['title'],
                     'game_id'      => $stream['game_id'],
                     'game_name'    => $stream['game_name'],
