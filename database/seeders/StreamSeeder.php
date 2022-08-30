@@ -41,6 +41,8 @@ class StreamSeeder extends Seeder
         }
 
         DB::table('streams')->truncate();
+
+        $topLiveStreams = collect($topLiveStreams)->shuffle()->toArray();
         DB::table('streams')->insert($topLiveStreams);
     }
 }
