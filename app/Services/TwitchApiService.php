@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class TwitchApiService
+class TwitchApiService extends BaseService
 {
 
     private string $baseUrl;
@@ -18,7 +17,7 @@ class TwitchApiService
         $this->httpClient = Http::withHeaders([
             'Accept'        => 'application/json',
             'Content-Type'  => 'application/json',
-            'Authorization' => 'Bearer vysbbrkwwaxrvxt5ypb7py3npef633',
+            'Authorization' => 'Bearer 9ut64vho1pemhf64rzwy5psla8cy83',
             'Client-id'     => config('services.twitch.client_id')
         ]);
     }
@@ -26,13 +25,19 @@ class TwitchApiService
     public function getStreams(string $cursor = ''): array
     {
         $response = $this->httpClient->get("$this->baseUrl/streams?first=100&after=$cursor");
-        return json_decode($response, true);
+        return $this->returnAssocResponse($response);
     }
 
     public function getUserFollowedStreams(int $userId, string $cursor = ''): array
     {
         $response = $this->httpClient->get("$this->baseUrl/streams/followed?user_id=$userId&first=100&after=$cursor");
-        return json_decode($response, true);
+        return $this->returnAssocResponse($response);
+    }
+
+    public function getStreamTags(string $cursor = ''): array
+    {
+        $response = $this->httpClient->get("$this->baseUrl/tags/streams?first=100&after=$cursor");
+        return $this->returnAssocResponse($response);
     }
 
 }

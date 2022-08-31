@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Cache\StreamCache;
 use App\Services\TwitchApiService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class StreamSeeder extends Seeder
 {
@@ -19,8 +19,9 @@ class StreamSeeder extends Seeder
 
     public function run(): void
     {
-        $topLiveStreams = [];
         $cursor         = '';
+        $topLiveStreams = [];
+        $streamTags     = [];
 
         for ($i = 0; $i < 10; $i++) {
             $streams = $this->twitchApiService->getStreams($cursor);
@@ -34,16 +35,34 @@ class StreamSeeder extends Seeder
                     'viewer_count' => $stream['viewer_count'],
                     'started_at'   => Carbon::parse($stream['started_at'])->toDateTimeString(),
                     'created_at'   => now(),
-                    'updated_at'   => now(),
+                    'updated_at'   => now()
                 ];
+
+                foreach ($stream['tag_ids'] ?? [] as $tagId) {
+                    $streamTags[] = [
+                        'tag_id'     => $tagId,
+                        'stream_id'  => $stream['id'],
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
+                }
             }
 
             $cursor = $streams['pagination']['cursor'];
         }
 
-        DB::table('streams')->truncate();
+        $topLiveStreams = collect($topLiveStreams)->unique('id')->shuffle()->toArray();
 
-        $topLiveStreams = collect($topLiveStreams)->shuffle()->toArray();
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+        DB::table('streams')->truncate();
+        DB::table('stream_tag')->truncate();
+
         DB::table('streams')->insert($topLiveStreams);
+        DB::table('stream_tag')->insert($streamTags);
+
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+        StreamCache::cacheTop1000Streams();
     }
 }
