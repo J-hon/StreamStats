@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
-use App\Services\TwitchApiService;
+use App\Services\StreamService;
 use Illuminate\Http\JsonResponse;
 
 class StreamController extends BaseController
 {
 
-    protected TwitchApiService $twitchApiService;
+    protected StreamService $streamService;
 
-    public function __construct(TwitchApiService $twitchApiService)
+    public function __construct(StreamService $streamService)
     {
-        $this->twitchApiService = $twitchApiService;
+        $this->streamService = $streamService;
     }
 
     public function index(): JsonResponse
     {
-        $streams = $this->twitchApiService->getStreams();
-        return $this->responseJson(true, 200, 'Streams retrieved!', compact('streams'));
+        $streams = $this->streamService->viewerCountDiff();
+        return $this->responseJson(true, 200, 'Top streams retrieved!', compact('streams'));
     }
 
 }
