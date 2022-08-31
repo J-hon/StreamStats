@@ -18,8 +18,8 @@ class StreamController extends BaseController
 
     public function index(): JsonResponse
     {
-        $streams = $this->streamService->viewerCountDiff();
-        return $this->responseJson(true, 200, 'Top streams retrieved!', compact('streams'));
+        $stats = $this->streamService->getStats();
+        return $this->responseJson(true, 200, 'Stats retrieved!', compact('stats'));
     }
 
 }
