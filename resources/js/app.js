@@ -10,6 +10,13 @@ import VueAxios from 'vue-axios';
 
 import LoginComponent from './components/LoginComponent.vue';
 import DashboardComponent from './components/DashboardComponent.vue';
+import TableComponent from './components/utils/TableComponent.vue';
+import PaginationComponent from './components/utils/PaginationComponent.vue';
+import TopStreamComponent from './components/stats/TopStreamComponent.vue';
+import TopStreamsByViewerCountComponent from './components/stats/TopStreamsByViewerCountComponent.vue';
+import StreamsByStartTimeComponent from './components/stats/StreamsByStartTimeComponent.vue';
+import UserFollowingTopStreamsComponent from './components/stats/UserFollowingTopStreamsComponent.vue';
+import UserSharingTagsWithTopStreamsComponent from './components/stats/UserSharingTagsWithTopStreamsComponent.vue';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -23,6 +30,13 @@ app.use(VueAxios);
 
 app.component('login-component', LoginComponent);
 app.component('dashboard-component', DashboardComponent);
+app.component('table-component', TableComponent);
+app.component('pagination-component', PaginationComponent);
+app.component('top-stream-component', TopStreamComponent);
+app.component('top-streams-by-viewer-count-component', TopStreamsByViewerCountComponent);
+app.component('streams-by-start-time-component', StreamsByStartTimeComponent);
+app.component('user-following-top-streams-component', UserFollowingTopStreamsComponent);
+app.component('user-sharing-tags-with-top-streams-component', UserSharingTagsWithTopStreamsComponent);
 
 /**
  * The following block of code may be used to automatically register your

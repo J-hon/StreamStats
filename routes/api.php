@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LoginController;
-use App\Http\Controllers\Api\StreamController;
+use App\Http\Controllers\Api\StatsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth/{provider}')->group(function () {
     Route::get('redirect', [LoginController::class, 'redirectToProvider']);
-    Route::get('callback', [LoginController::class, 'handleProviderCallback']);
 });
 
-Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
-    Route::get('streams', [StreamController::class, 'index']);
+Route::prefix('dashboard/stats')->group(function () {
+    Route::get('top-streams', [StatsController::class, 'topStreams']);
+    Route::get('streams-by-start-time', [StatsController::class, 'streamsByStartTime']);
+    Route::get('top-100-streams-by-viewer-count', [StatsController::class, 'top100StreamsByViewerCount']);
+
+    Route::get('user-shared-tags-with-top-streams', [StatsController::class, 'sharedTags']);
+    Route::get('user-followed-top-streams', [StatsController::class, 'topStreamsUserIsFollowing']);
+    Route::get('user-viewer-count-difference', [StatsController::class, 'getViewerCountDifference']);
 });

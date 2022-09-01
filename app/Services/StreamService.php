@@ -16,19 +16,7 @@ class StreamService
         $this->twitchApiService = $twitchApiService;
     }
 
-    public function getStats(): array
-    {
-        return [
-            'top_streams_per_game'                  => $this->getTopStreams(),
-            'top_100_streams_by_viewer_count'       => $this->getTop100StreamsByViewerCount(),
-            'streams_by_start_time'                 => $this->getTopStreamsByStartTime(),
-            'user_followed_top_streams'             => $this->getTopStreamsUserIsFollowing(),
-            'viewer_count_diff'                     => $this->viewerCountDiff(),
-            'user_shared_tags_with_top_100_streams' => $this->sharedTags()
-        ];
-    }
-
-    private function getTopStreams(): array
+    public function getTopStreams(): array
     {
         return DB::table('streams')
             ->select('game_name')
@@ -37,28 +25,28 @@ class StreamService
             ->selectRaw("SUM(viewer_count) AS viewer_count_sum")
             ->selectRaw("round(AVG(viewer_count), 0) AS viewer_count_avg")
             ->groupBy('game_name')
-            ->get()
+            ->paginate(10)
             ->toArray();
     }
 
-    private function getTopStreamsByStartTime(): array
+    public function getStreamsByStartTime(): array
     {
         return DB::table('streams')
             ->addSelect(DB::raw('DATE_FORMAT(started_at, "%Y-%m-%d %H") AS rounded_up_start_time'))
-            ->addSelect(DB::raw('COUNT(*) AS streams_count'))
-            ->addSelect(DB::raw('SUM(viewer_count) AS viewer_count_sum'))
+            ->selectRaw("COUNT(*) AS stream_count")
+            ->selectRaw("SUM(viewer_count) AS viewer_count_sum")
             ->groupBy('rounded_up_start_time')
-            ->get()
+            ->paginate(10)
             ->toArray();
     }
 
-    public function getTop100StreamsByViewerCount(): array
+    public function getTopStreamsByViewerCount(string $sort = 'desc'): array
     {
         return DB::table('streams')
-            ->select('id', 'title', 'game_name', 'viewer_count', 'started_at')
-            ->orderBy('viewer_count', 'desc')
-            ->limit(100)
-            ->get()
+            ->select('id', 'title', 'viewer_count')
+            ->orderBy('viewer_count', $sort)
+            ->take(100)
+            ->paginate(10)
             ->toArray();
     }
 
@@ -91,7 +79,7 @@ class StreamService
         return max($quantityDistanceToTop1000, 0);
     }
 
-    public function sharedTags(): array
+    public function getSharedTags(): array
     {
         $tags                = [];
         $userFollowedStreams = collect($this->getUserFollowedStreams())->pluck('id');
@@ -111,7 +99,7 @@ class StreamService
 
     private function getUserFollowedStreams(): array
     {
-        return $this->twitchApiService->getUserFollowedStreams(Auth::user()->provider_id)['data'];
+        return $this->twitchApiService->getUserFollowedStreams(821326948)['data'];
     }
 
     private function calculateMinimumValuesByKeyInAssociativeArray(array $params, string $key = 'viewer_count'): int
