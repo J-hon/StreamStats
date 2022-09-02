@@ -1,11 +1,9 @@
 <template>
-    <div class="mx-auto bg-gray-100 rounded-md max-w-6xl my-auto p-5">
+    <div class="my-auto py-10 bg-gray-200 min-h-screen max-w-7xl mx-auto px-8">
         <div class="flex-column">
             <h2 class="text-3xl font-semibold mb-5">Welcome Back</h2>
 
-            <div class="mb-6">
-                <top-stream-component></top-stream-component>
-            </div>
+            <top-stream-component></top-stream-component>
 
             <top-streams-by-viewer-count-component></top-streams-by-viewer-count-component>
 
@@ -39,7 +37,7 @@
         methods: {
             async getUserViewerCountDifference() {
                 let vm = this;
-                await axios.get('https://e323-102-89-32-81.ngrok.io/api/dashboard/stats/user-viewer-count-difference')
+                await axios.get('http://localhost:8000/api/dashboard/stats/user-viewer-count-difference')
                     .then((response) => {
                         vm.viewerCountDiff = response.data.data;
                     })

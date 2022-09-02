@@ -13,8 +13,10 @@
         <div v-else>
             <table-component
                  :headers="['ID', 'Title', 'Game Id', 'Game Name', 'Viewer Count']"
-                 :data="userFollowedTopStreams">
+                 :data="userFollowedTopStreams.data">
             </table-component>
+
+            <pagination-component :pagination="userFollowedTopStreams" @paginate="getUserFollowedTopStreams()" :offset="4"></pagination-component>
         </div>
     </div>
 </template>
@@ -35,7 +37,7 @@
         methods: {
             async getUserFollowedTopStreams() {
                 let vm = this;
-                await axios.get('https://e323-102-89-32-81.ngrok.io/api/dashboard/stats/user-followed-top-streams')
+                await axios.get(`http://localhost:8000/api/dashboard/stats/user-following-top-streams?page=${vm.userFollowedTopStreams.current_page}`)
                     .then((response) => {
                         vm.userFollowedTopStreams = response.data.data;
                         vm.ready = true;

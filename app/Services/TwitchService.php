@@ -6,7 +6,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-class TwitchApiService
+class TwitchService
 {
 
     private string $baseUrl;
@@ -18,7 +18,7 @@ class TwitchApiService
         $this->httpClient = Http::withHeaders([
             'Accept'        => 'application/json',
             'Content-Type'  => 'application/json',
-            'Authorization' => 'Bearer 6ts774kee7krf5eq3s32v28qlmutnu',
+            'Authorization' => 'Bearer 1p0ne7yw0yo3xuqyy34tkofm9rh949',
             'Client-id'     => config('services.twitch.client_id')
         ]);
     }

@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Services\TwitchApiService;
+use App\Services\TwitchService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class TagSeeder extends Seeder
 {
 
-    protected TwitchApiService $twitchApiService;
+    protected TwitchService $twitchService;
 
-    public function __construct(TwitchApiService $twitchApiService)
+    public function __construct(TwitchService $twitchService)
     {
-        $this->twitchApiService = $twitchApiService;
+        $this->twitchService = $twitchService;
     }
 
     /**
@@ -27,7 +27,7 @@ class TagSeeder extends Seeder
         $tags   = [];
 
         do {
-            $twitchTags  = $this->twitchApiService->getStreamTags($cursor);
+            $twitchTags  = $this->twitchService->getStreamTags($cursor);
 
             foreach ($twitchTags['data'] as $tag) {
                 $tags[] = [

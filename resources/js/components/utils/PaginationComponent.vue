@@ -18,8 +18,8 @@
         <div class="md:-mt-px md:flex">
             <a href="javascript:void(0)" v-for="page in pagesNumber"
                class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-               :aria-current="page == pagination.current_page"
-               :class="{'border-indigo-500 text-indigo-600' : page == pagination.current_page}"
+               :aria-current="page === pagination.current_page"
+               :class="{'border-indigo-500 text-indigo-600' : page === pagination.current_page}"
                @click.prevent="changePage(page)"
             >{{ page }}</a>
         </div>

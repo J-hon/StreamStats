@@ -13,8 +13,10 @@
         <div v-else>
             <table-component
                  :headers="['Name', 'Description']"
-                 :data="userSharedTagsWithTopStreams">
+                 :data="userSharedTagsWithTopStreams.data">
             </table-component>
+
+            <pagination-component :pagination="userSharedTagsWithTopStreams" @paginate="getUserSharedTagsWithTopStreams()" :offset="4"></pagination-component>
         </div>
     </div>
 </template>
@@ -35,7 +37,7 @@
         methods: {
             async getUserSharedTagsWithTopStreams() {
                 let vm = this;
-                await axios.get('https://e323-102-89-32-81.ngrok.io/api/dashboard/stats/user-shared-tags-with-top-streams')
+                await axios.get(`http://localhost:8000/api/dashboard/stats/user-shared-tags-with-top-streams?page=${vm.userSharedTagsWithTopStreams.current_page}`)
                     .then((response) => {
                         vm.userSharedTagsWithTopStreams = response.data.data;
                         vm.ready = true;

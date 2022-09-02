@@ -20,7 +20,7 @@
         },
         methods: {
             login() {
-                axios.get('https://e323-102-89-32-81.ngrok.io/api/auth/twitch/redirect')
+                axios.get('http://localhost:8000/api/auth/twitch/redirect')
                     .then((response) => {
                         let data = response.data.data;
                         window.location.href = data.redirect_url;

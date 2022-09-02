@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-danger">
+    <div class="mb-5">
         <h6 class="text-md font-semibold">Top streams per game</h6>
 
         <div v-if="!ready">
@@ -38,7 +38,7 @@
         methods: {
             async getTopStreamStats() {
                 let vm = this;
-                await axios.get(`https://e323-102-89-32-81.ngrok.io/api/dashboard/stats/top-streams?page=${vm.topStreams.current_page}`)
+                await axios.get(`http://localhost:8000/api/dashboard/stats/top-streams?page=${vm.topStreams.current_page}`)
                     .then((response) => {
                         vm.topStreams = response.data.data;
                         vm.ready      = true;

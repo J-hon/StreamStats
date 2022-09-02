@@ -24,7 +24,7 @@ Route::prefix('dashboard/stats')->group(function () {
     Route::get('streams-by-start-time', [StatsController::class, 'streamsByStartTime']);
     Route::get('top-100-streams-by-viewer-count', [StatsController::class, 'top100StreamsByViewerCount']);
 
-    Route::get('user-shared-tags-with-top-streams', [StatsController::class, 'sharedTags']);
-    Route::get('user-followed-top-streams', [StatsController::class, 'topStreamsUserIsFollowing']);
+    Route::get('user-shared-tags-with-top-streams', [StatsController::class, 'sharedTags'])->name('shared.tags');
+    Route::get('user-following-top-streams', [StatsController::class, 'topStreamsUserIsFollowing'])->name('top.streams.following');
     Route::get('user-viewer-count-difference', [StatsController::class, 'getViewerCountDifference']);
 });

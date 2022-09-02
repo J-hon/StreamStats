@@ -3,18 +3,18 @@
 namespace Database\Seeders;
 
 use App\Cache\StreamCache;
-use App\Services\TwitchApiService;
+use App\Services\TwitchService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class StreamSeeder extends Seeder
 {
-    protected TwitchApiService $twitchApiService;
+    protected TwitchService $twitchService;
 
-    public function __construct(TwitchApiService $twitchApiService)
+    public function __construct(TwitchService $twitchService)
     {
-        $this->twitchApiService = $twitchApiService;
+        $this->twitchService = $twitchService;
     }
 
     public function run(): void
@@ -24,7 +24,7 @@ class StreamSeeder extends Seeder
         $streamTags     = [];
 
         for ($i = 0; $i < 10; $i++) {
-            $streams = $this->twitchApiService->getStreams($cursor);
+            $streams = $this->twitchService->getStreams($cursor);
 
             foreach($streams['data'] as $stream) {
                 $topLiveStreams[] = [

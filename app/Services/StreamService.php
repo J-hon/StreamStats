@@ -3,17 +3,20 @@
 namespace App\Services;
 
 use App\Models\Stream;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StreamService
 {
 
-    protected TwitchApiService $twitchApiService;
+    protected TwitchService $twitchService;
 
-    public function __construct(TwitchApiService $twitchApiService)
+    public function __construct(TwitchService $twitchService)
     {
-        $this->twitchApiService = $twitchApiService;
+        $this->twitchService = $twitchService;
     }
 
     public function getTopStreams(): array
@@ -65,7 +68,10 @@ class StreamService
             ];
         }, $userFollowedStreams);
 
-        return array_intersect_key($userFollowedStreams, $streams);
+        $streams = array_intersect_key($userFollowedStreams, $streams);
+        return $this->paginate($streams, options: [
+            'path' => route('top.streams.following')
+        ])->toArray();
     }
 
     public function viewerCountDiff()
@@ -82,7 +88,7 @@ class StreamService
     public function getSharedTags(): array
     {
         $tags                = [];
-        $userFollowedStreams = collect($this->getUserFollowedStreams())->pluck('id');
+        $userFollowedStreams = collect($this->getUserFollowedStreams())->pluck('id')->unique('id')->toArray();
         $streams             = Stream::query()->with('tags:id,name,description')->whereIn('id', $userFollowedStreams)->get();
 
         foreach ($streams as $stream) {
@@ -94,12 +100,14 @@ class StreamService
             }
         }
 
-        return $tags;
+        return $this->paginate($tags, options: [
+            'path' => route('shared.tags')
+        ])->toArray();
     }
 
     private function getUserFollowedStreams(): array
     {
-        return $this->twitchApiService->getUserFollowedStreams(821326948)['data'];
+        return $this->twitchService->getUserFollowedStreams(821326948)['data'];
     }
 
     private function calculateMinimumValuesByKeyInAssociativeArray(array $params, string $key = 'viewer_count'): int
@@ -107,6 +115,14 @@ class StreamService
         return array_reduce($params, function($carry, $item) use ($key) {
             return min($carry, $item[$key]);
         }, PHP_INT_MAX);
+    }
+
+    public function paginate($items, $perPage = 10, $page = null, $options = []): LengthAwarePaginator
+    {
+        $page  = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
 }
