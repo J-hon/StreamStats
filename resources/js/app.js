@@ -8,6 +8,9 @@ import './bootstrap';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 
+// axios.defaults.withCredentials = true
+axios.defaults.baseURL = 'http://localhost:8000/api/';
+
 import LoginComponent from './components/LoginComponent.vue';
 import DashboardComponent from './components/DashboardComponent.vue';
 import TableComponent from './components/utils/TableComponent.vue';

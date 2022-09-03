@@ -18,7 +18,7 @@ class TwitchService
         $this->httpClient = Http::withHeaders([
             'Accept'        => 'application/json',
             'Content-Type'  => 'application/json',
-            'Authorization' => 'Bearer 1p0ne7yw0yo3xuqyy34tkofm9rh949',
+            'Authorization' => 'Bearer kjbbz7i9jpesdmb3wtkk3mbzhbqx8f',
             'Client-id'     => config('services.twitch.client_id')
         ]);
     }

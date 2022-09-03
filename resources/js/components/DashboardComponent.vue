@@ -24,6 +24,7 @@
 
 <script>
     export default {
+        props: ['response'],
         data() {
             return {
                 viewerCountDiff: '',
@@ -31,13 +32,17 @@
         },
 
         mounted() {
+            if (this.response) {
+                window.localStorage.setItem('token', JSON.stringify(this.response.auth_token));
+            }
+
             this.getUserViewerCountDifference();
         },
 
         methods: {
             async getUserViewerCountDifference() {
                 let vm = this;
-                await axios.get('http://localhost:8000/api/dashboard/stats/user-viewer-count-difference')
+                await axios.get('dashboard/stats/user-viewer-count-difference')
                     .then((response) => {
                         vm.viewerCountDiff = response.data.data;
                     })
