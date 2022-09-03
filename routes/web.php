@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'login')->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+Route::prefix('auth/{provider}')->group(function () {
+    Route::get('callback', [LoginController::class, 'handleProviderCallback']);
 });
+
+//Route::middleware('auth')->group(function () {
+    Route::view('dashboard', 'dashboard')->name('console.dashboard');
+//});

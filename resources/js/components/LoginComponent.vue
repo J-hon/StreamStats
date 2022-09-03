@@ -1,15 +1,12 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Login to Twitch</div>
-
-                    <div class="card-body">
-                        <button @click.prevent="login">Login</button>
-                    </div>
-                </div>
-            </div>
+    <div class="mx-auto bg-gray-100 rounded-md w-1/4 my-48 p-5">
+        <div class="flex-column">
+            <h2 class="text-xl font-semibold mb-5">Welcome To StreamStats</h2>
+            <button
+                class="rounded-md bg-black py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-white hover:bg-gray-700"
+                @click.prevent="login">
+                Login to Twitch
+            </button>
         </div>
     </div>
 </template>
@@ -23,7 +20,7 @@
         },
         methods: {
             login() {
-                axios.get('http://streamstats.test/api/auth/twitch/redirect')
+                axios.get('http://localhost:8000/api/auth/twitch/redirect')
                     .then((response) => {
                         let data = response.data.data;
                         window.location.href = data.redirect_url;

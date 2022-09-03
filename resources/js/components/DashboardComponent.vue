@@ -1,21 +1,55 @@
 <template>
-    Logged in
+    <div class="my-auto py-10 bg-gray-200 min-h-screen max-w-7xl mx-auto px-8">
+        <div class="flex-column">
+            <h2 class="text-3xl font-semibold mb-5">Welcome Back</h2>
+
+            <top-stream-component></top-stream-component>
+
+            <top-streams-by-viewer-count-component></top-streams-by-viewer-count-component>
+
+            <streams-by-start-time-component></streams-by-start-time-component>
+
+            <user-following-top-streams-component></user-following-top-streams-component>
+
+            <user-sharing-tags-with-top-streams-component></user-sharing-tags-with-top-streams-component>
+
+            <div class="mb-5">
+                <h6 class="text-sm font-semibold">
+                    How many viewers does the lowest viewer count stream that you're following need to gain in order to make it into the top 1000 streams?
+                </h6> {{ viewerCountDiff }}
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
-    props: ['response'],
-    data() {
-        return {
-            //
+    export default {
+        props: ['response'],
+        data() {
+            return {
+                viewerCountDiff: '',
+            }
+        },
+
+        mounted() {
+            if (this.response) {
+                window.localStorage.setItem('token', JSON.stringify(this.response.auth_token));
+            }
+
+            this.getUserViewerCountDifference();
+        },
+
+        methods: {
+            async getUserViewerCountDifference() {
+                let vm = this;
+                await axios.get('dashboard/stats/user-viewer-count-difference')
+                    .then((response) => {
+                        vm.viewerCountDiff = response.data.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
-    },
-    mounted() {
-        console.log(this.response);
     }
-}
 </script>
-
-<style scoped>
-
-</style>
