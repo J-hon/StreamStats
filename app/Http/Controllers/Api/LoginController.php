@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends BaseController
@@ -19,30 +18,27 @@ class LoginController extends BaseController
         return $this->responseJson(true, 200, 'Redirect URL retrieved!', ['redirect_url' => $redirectUrl]);
     }
 
-    public function handleProviderCallback(string $provider)
+    public function handleProviderCallback(string $provider): RedirectResponse
     {
-        $user     = Socialite::driver($provider)->stateless()->user();
-        $response = $this->createOrLoginUser($user);
+        $user = Socialite::driver($provider)->stateless()->user();
+        $this->updateOrCreateAndLoginUser($user);
 
         return redirect()->route('console.dashboard');
     }
 
-    private function createOrLoginUser(object $data): array
+    private function updateOrCreateAndLoginUser(object $data): void
     {
         $userQuery = User::query();
 
         $user = $userQuery->updateOrCreate([
-            'provider_id'    => $data->id,
+            'provider_id'    => $data->id
         ], [
             'username'       => $data->name,
             'provider_token' => $data->token,
             'email'          => $data->email
         ]);
 
-        return [
-            'user'       => new UserResource($user),
-            'auth_token' => $user->createToken(config('app.name'))->plainTextToken
-        ];
+        Auth::login($user);
     }
 
 }

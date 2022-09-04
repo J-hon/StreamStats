@@ -18,16 +18,19 @@
                 processing: false
             }
         },
+
         methods: {
             login() {
-                axios.get('http://localhost:8000/api/auth/twitch/redirect')
-                    .then((response) => {
-                        let data = response.data.data;
-                        window.location.href = data.redirect_url;
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                axios.get('sanctum/csrf-cookie').then(response => {
+                    axios.get('auth/twitch/redirect')
+                        .then((response) => {
+                            let data = response.data.data;
+                            window.location.href = data.redirect_url;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                });
 
             }
         }

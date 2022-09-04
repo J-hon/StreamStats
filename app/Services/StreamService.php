@@ -107,7 +107,7 @@ class StreamService
 
     private function getUserFollowedStreams(): array
     {
-        return $this->twitchService->getUserFollowedStreams(821326948)['data'];
+        return $this->twitchService->getUserFollowedStreams(Auth::user()->provider_id)['data'];
     }
 
     private function calculateMinimumValuesByKeyInAssociativeArray(array $params, string $key = 'viewer_count'): int

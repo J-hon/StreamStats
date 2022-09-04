@@ -37,7 +37,7 @@
         methods: {
             async getUserFollowedTopStreams() {
                 let vm = this;
-                await axios.get(`http://localhost:8000/api/dashboard/stats/user-following-top-streams?page=${vm.userFollowedTopStreams.current_page}`)
+                await axios.get(`api/dashboard/stats/user-following-top-streams?page=${vm.userFollowedTopStreams.current_page}`)
                     .then((response) => {
                         vm.userFollowedTopStreams = response.data.data;
                         vm.ready = true;

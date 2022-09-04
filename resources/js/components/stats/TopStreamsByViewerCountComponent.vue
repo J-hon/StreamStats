@@ -73,7 +73,7 @@
         methods: {
             async getTopStreamsByViewerCountStats(sort = 'desc') {
                 let vm = this;
-                await axios.get(`http://localhost:8000/api/dashboard/stats/top-100-streams-by-viewer-count?sort=${sort}&page=${vm.topStreamsByViewerCount.current_page}`)
+                await axios.get(`api/dashboard/stats/top-100-streams-by-viewer-count?sort=${sort}&page=${vm.topStreamsByViewerCount.current_page}`)
                     .then((response) => {
                         vm.topStreamsByViewerCount = response.data.data.data;
                         vm.ready = true;

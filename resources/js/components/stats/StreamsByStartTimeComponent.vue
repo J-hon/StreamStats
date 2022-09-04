@@ -36,7 +36,7 @@
         methods: {
             async getStreamsByStartTime() {
                 let vm = this;
-                await axios.get(`http://localhost:8000/api/dashboard/stats/streams-by-start-time?page=${vm.streamsByStartTime.current_page}`)
+                await axios.get(`api/dashboard/stats/streams-by-start-time?page=${vm.streamsByStartTime.current_page}`)
                     .then((response) => {
                         vm.streamsByStartTime = response.data.data;
                         vm.ready = true;

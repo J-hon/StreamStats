@@ -8,9 +8,6 @@ import './bootstrap';
 import { createApp } from 'vue';
 import VueAxios from 'vue-axios';
 
-// axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:8000/api/';
-
 import LoginComponent from './components/LoginComponent.vue';
 import DashboardComponent from './components/DashboardComponent.vue';
 import TableComponent from './components/utils/TableComponent.vue';
@@ -21,9 +18,13 @@ import StreamsByStartTimeComponent from './components/stats/StreamsByStartTimeCo
 import UserFollowingTopStreamsComponent from './components/stats/UserFollowingTopStreamsComponent.vue';
 import UserSharingTagsWithTopStreamsComponent from './components/stats/UserSharingTagsWithTopStreamsComponent.vue';
 
+axios.defaults.withCredentials                    = true
+axios.defaults.baseURL                            = 'http://localhost:8000/';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
- * registering components with the application instance so they are ready
+ * registering components with the application instance, so they are ready
  * to use in your application's views. An example is included for you.
  */
 

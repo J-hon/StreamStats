@@ -37,7 +37,7 @@
         methods: {
             async getUserSharedTagsWithTopStreams() {
                 let vm = this;
-                await axios.get(`http://localhost:8000/api/dashboard/stats/user-shared-tags-with-top-streams?page=${vm.userSharedTagsWithTopStreams.current_page}`)
+                await axios.get(`api/dashboard/stats/user-shared-tags-with-top-streams?page=${vm.userSharedTagsWithTopStreams.current_page}`)
                     .then((response) => {
                         vm.userSharedTagsWithTopStreams = response.data.data;
                         vm.ready = true;
