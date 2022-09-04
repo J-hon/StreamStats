@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Cache\StreamCache;
 use App\Services\TwitchService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -62,7 +61,5 @@ class StreamSeeder extends Seeder
         DB::table('stream_tag')->insert($streamTags);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
-
-        StreamCache::cacheTop1000Streams();
     }
 }

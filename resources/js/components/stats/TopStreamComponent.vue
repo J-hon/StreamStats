@@ -38,7 +38,7 @@
         methods: {
             async getTopStreamStats() {
                 let vm = this;
-                await axios.get(`http://localhost:8000/api/dashboard/stats/top-streams?page=${vm.topStreams.current_page}`)
+                await axios.get(`api/dashboard/stats/top-streams?page=${vm.topStreams.current_page}`)
                     .then((response) => {
                         vm.topStreams = response.data.data;
                         vm.ready      = true;
