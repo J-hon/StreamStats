@@ -4,7 +4,6 @@ namespace Tests;
 
 use Faker\Factory as Faker;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -18,7 +17,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->faker = Faker::create();
 
-        Artisan::call('migrate:fresh');
+        $this->artisan('migrate:refresh');
 
         $this->withoutExceptionHandling();
     }

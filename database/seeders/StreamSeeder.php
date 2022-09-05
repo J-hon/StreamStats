@@ -6,6 +6,7 @@ use App\Services\TwitchService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class StreamSeeder extends Seeder
 {
@@ -53,14 +54,14 @@ class StreamSeeder extends Seeder
 
         $topLiveStreams = collect($topLiveStreams)->unique('id')->shuffle()->toArray();
 
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+        Schema::disableForeignKeyConstraints();
 
-        DB::table('streams')->truncate();
         DB::table('stream_tag')->truncate();
+        DB::table('streams')->truncate();
 
         DB::table('streams')->insert($topLiveStreams);
         DB::table('stream_tag')->insert($streamTags);
 
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+        Schema::enableForeignKeyConstraints();
     }
 }

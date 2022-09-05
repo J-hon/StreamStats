@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,8 +19,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::prefix('auth/{provider}')->group(function () {
-    Route::get('redirect', [LoginController::class, 'redirectToProvider']);
-    Route::get('callback', [LoginController::class, 'handleProviderCallback']);
+    Route::get('redirect', [AuthController::class, 'redirectToProvider']);
+    Route::get('callback', [AuthController::class, 'handleProviderCallback']);
 });
 
 Route::middleware('auth')->group(function () {

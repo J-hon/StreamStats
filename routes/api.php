@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatsController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('logout')->group(function () {
-        Route::get('', function () {
-            Auth::logout();
-        });
-    });
+    Route::get('logout', [AuthController::class, 'logout']);
 
-    Route::prefix('dashboard/stats')->group(function () {
+    Route::middleware('verify_provider_access_token')->prefix('dashboard/stats')->group(function () {
         Route::get('top-streams', [StatsController::class, 'topStreams']);
         Route::get('streams-by-start-time', [StatsController::class, 'streamsByStartTime']);
         Route::get('top-100-streams-by-viewer-count', [StatsController::class, 'top100StreamsByViewerCount']);

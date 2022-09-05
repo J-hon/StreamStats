@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
-class LoginController extends BaseController
+class AuthController extends BaseController
 {
 
     public function redirectToProvider(string $provider): JsonResponse
@@ -25,6 +25,11 @@ class LoginController extends BaseController
         $this->updateOrCreateAndLoginUser($user);
 
         return redirect()->route('console.dashboard');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
     }
 
     private function updateOrCreateAndLoginUser(object $data): void
