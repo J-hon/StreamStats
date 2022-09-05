@@ -37,10 +37,10 @@
                                 </thead>
 
                                 <tbody class="divide-y divide-gray-200 bg-white">
-                                    <tr v-for="(datum, index) in topStreamsByViewerCount" :key="index">
+                                    <tr v-for="(datum, index) in topStreamsByViewerCount.data" :key="index">
                                         <td class="whitespace-nowrap break-words py-4 pl-4 pr-3 text-sm font-medium text-black sm:pl-6"
                                             v-for="(item, itemIndex) in datum" :key="itemIndex">
-                                            {{ topStreamsByViewerCount[index][itemIndex] }}
+                                            {{ topStreamsByViewerCount.data[index][itemIndex] }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -75,7 +75,7 @@
                 let vm = this;
                 await axios.get(`api/dashboard/stats/top-100-streams-by-viewer-count?sort=${sort}&page=${vm.topStreamsByViewerCount.current_page}`)
                     .then((response) => {
-                        vm.topStreamsByViewerCount = response.data.data.data;
+                        vm.topStreamsByViewerCount = response.data.data;
                         vm.ready = true;
                     })
                     .catch((error) => {
