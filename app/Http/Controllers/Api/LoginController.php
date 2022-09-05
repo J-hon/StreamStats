@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Cache\UserCache;
+use App\Cache\ProviderTokenCache;
 use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +39,7 @@ class LoginController extends BaseController
 
         Auth::login($user);
 
-        UserCache::user($user->id);
+        ProviderTokenCache::cache($data->token);
     }
 
 }

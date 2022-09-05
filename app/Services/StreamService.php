@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Cache\StreamCache;
-use App\Cache\UserCache;
 use App\Models\Stream;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -109,7 +108,7 @@ class StreamService
 
     private function getUserFollowedStreams(): array
     {
-        return $this->twitchService->getUserFollowedStreams(UserCache::user(Auth::id())->provider_id)['data'];
+        return $this->twitchService->getUserFollowedStreams(Auth::user()->provider_id)['data'];
     }
 
     private function calculateMinimumValuesByKeyInAssociativeArray(array $params, string $key = 'viewer_count'): int
