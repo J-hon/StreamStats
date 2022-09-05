@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\StreamSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 
 class RefreshStreamDataCommand extends Command
 {
@@ -19,7 +19,7 @@ class RefreshStreamDataCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Refresh the streams data every 15 minutes';
+    protected $description = 'Refresh the top 1000 streams every 15 minutes';
 
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class RefreshStreamDataCommand extends Command
      */
     public function handle()
     {
-        Artisan::call('db:seed --class=StreamSeeder');
+        $this->call(StreamSeeder::class);
         $this->info('Stream refreshed');
 
         return 0;
