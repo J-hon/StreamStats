@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Cache\UserCache;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,18 @@ class TwitchService
         return $this->returnAssocResponse($response);
     }
 
+    public function validateUserAccessToken(string $accessToken): array
+    {
+        $response = Http::withHeaders([
+            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
+            'Authorization' => 'Bearer '.$accessToken,
+            'Client-id'     => config('services.twitch.client_id')
+        ])->get("https://id.twitch.tv/oauth2/validate");
+
+        return $this->returnAssocResponse($response);
+    }
+
     protected function returnAssocResponse(Response $response)
     {
         return json_decode($response, true);
@@ -52,7 +65,7 @@ class TwitchService
         $this->httpClient = Http::withHeaders([
             'Accept'        => 'application/json',
             'Content-Type'  => 'application/json',
-            'Authorization' => 'Bearer '.Auth::user()->provider_token,
+            'Authorization' => 'Bearer '.UserCache::user(Auth::id())->provider_token,
             'Client-id'     => config('services.twitch.client_id')
         ]);
     }

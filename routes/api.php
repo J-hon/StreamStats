@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('dashboard/stats')->group(function () {
+    Route::middleware('verify_provider_access_token')->prefix('dashboard/stats')->group(function () {
         Route::get('top-streams', [StatsController::class, 'topStreams']);
         Route::get('streams-by-start-time', [StatsController::class, 'streamsByStartTime']);
         Route::get('top-100-streams-by-viewer-count', [StatsController::class, 'top100StreamsByViewerCount']);

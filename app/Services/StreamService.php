@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Cache\StreamCache;
+use App\Cache\UserCache;
 use App\Models\Stream;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -55,8 +57,8 @@ class StreamService
 
     public function getTopStreamsUserIsFollowing(): array
     {
+        $streams = StreamCache::get();
         $userFollowedStreams = $this->getUserFollowedStreams();
-        $streams = DB::table('streams')->get(['id', 'title', 'game_id', 'game_name', 'viewer_count'])->toArray();
 
         $userFollowedStreams = array_map(function ($stream) {
             return [
@@ -76,7 +78,7 @@ class StreamService
 
     public function viewerCountDiff()
     {
-        $streams = Stream::query()->get()->toArray();
+        $streams = StreamCache::get();
 
         $lowestStreamViewerCount  = $this->calculateMinimumValuesByKeyInAssociativeArray($streams);
         $userFollowedStreamsCount = $this->calculateMinimumValuesByKeyInAssociativeArray($this->getUserFollowedStreams());
@@ -107,7 +109,7 @@ class StreamService
 
     private function getUserFollowedStreams(): array
     {
-        return $this->twitchService->getUserFollowedStreams(Auth::user()->provider_id)['data'];
+        return $this->twitchService->getUserFollowedStreams(UserCache::user(Auth::id())->provider_id)['data'];
     }
 
     private function calculateMinimumValuesByKeyInAssociativeArray(array $params, string $key = 'viewer_count'): int

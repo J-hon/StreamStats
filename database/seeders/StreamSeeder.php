@@ -22,7 +22,7 @@ class StreamSeeder extends Seeder
         $topLiveStreams = [];
         $streamTags     = [];
 
-        for ($i = 0; $i < 10; $i++) {
+        do {
             $streams = $this->twitchService->getStreams($cursor);
 
             foreach($streams['data'] as $stream) {
@@ -48,7 +48,8 @@ class StreamSeeder extends Seeder
             }
 
             $cursor = $streams['pagination']['cursor'];
-        }
+
+        } while (count($topLiveStreams) <= 900);
 
         $topLiveStreams = collect($topLiveStreams)->unique('id')->shuffle()->toArray();
 

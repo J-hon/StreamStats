@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cache\UserCache;
 use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +29,7 @@ class LoginController extends BaseController
 
     private function updateOrCreateAndLoginUser(object $data): void
     {
-        $userQuery = User::query();
-
-        $user = $userQuery->updateOrCreate([
+        $user = User::query()->updateOrCreate([
             'provider_id'    => $data->id
         ], [
             'username'       => $data->name,
@@ -39,6 +38,8 @@ class LoginController extends BaseController
         ]);
 
         Auth::login($user);
+
+        UserCache::user($user->id);
     }
 
 }
